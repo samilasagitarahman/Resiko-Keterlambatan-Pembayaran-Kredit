@@ -1,6 +1,6 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score
 import joblib
 
@@ -38,9 +38,13 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 # =========================
-# TRAIN MODEL
+# TRAIN MODEL (RANDOM FOREST)
 # =========================
-model = LinearRegression()
+model = RandomForestRegressor(
+    n_estimators=100,
+    random_state=42
+)
+
 model.fit(X_train, y_train)
 
 # =========================
@@ -51,7 +55,7 @@ y_pred = model.predict(X_test)
 mse = mean_squared_error(y_test, y_pred)
 r2 = r2_score(y_test, y_pred)
 
-print("Model trained successfully")
+print("Model trained successfully using Random Forest")
 print(f"MSE : {mse:.4f}")
 print(f"R²  : {r2:.4f}")
 
@@ -59,8 +63,9 @@ print(f"R²  : {r2:.4f}")
 # TEST PREDICTION
 # =========================
 example_gdp = 150000
-prediction = model.predict(pd.DataFrame([[example_gdp]], columns=["gdp_per_capita"]))
-
+prediction = model.predict(
+    pd.DataFrame([[example_gdp]], columns=["gdp_per_capita"])
+)
 
 print(f"Prediction for GDP {example_gdp}: {prediction[0]:.6f}")
 
